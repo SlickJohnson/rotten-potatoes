@@ -9,7 +9,9 @@ const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 
 const Review = mongoose.model('Review', {
-  title: String
+  title: String,
+  description: String,
+  movieTitle: String,
 });
 //
 // let reviews = [
@@ -43,5 +45,10 @@ app.get('/reviews/new', (req, res) => {
 
 // CREATE
 app.post('/reviews', (req, res) => {
-  console.log(req.body);
-})
+  Review.create(req.body).then((review) => {
+    console.log(review);
+    res.redirect('/');
+  }).catch((err) => {
+    console.log(err.message);
+  });
+});
