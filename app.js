@@ -4,7 +4,9 @@ const app = express();
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/rotten-potatoes');
 
-var exphbs = require('express-handlebars');
+const exphbs = require('express-handlebars');
+
+const bodyParser = require('body-parser');
 
 const Review = mongoose.model('Review', {
   title: String
@@ -14,6 +16,8 @@ const Review = mongoose.model('Review', {
 //   { title: "Greate Review" },
 //   { title: "Next Review" },
 // ]
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.listen(3000, () => {
   console.log('App listening on port 3000!');
@@ -32,6 +36,12 @@ app.get('/', (req, res) => {
     });
 });
 
+// NEW
 app.get('/reviews/new', (req, res) => {
   res.render('reviews-new', {});
 });
+
+// CREATE
+app.post('/reviews', (req, res) => {
+  console.log(req.body);
+})
