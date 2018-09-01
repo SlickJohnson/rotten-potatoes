@@ -12,12 +12,8 @@ const Review = mongoose.model('Review', {
   title: String,
   description: String,
   movieTitle: String,
+  rating: Number,
 });
-//
-// let reviews = [
-//   { title: "Greate Review" },
-//   { title: "Next Review" },
-// ]
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
