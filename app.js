@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/rotten-potatoes');
+mongoose.connect('mongodb://localhost/rotten-potatoes', { useNewUrlParser: true });
 
 const exphbs = require('express-handlebars');
 
@@ -27,7 +27,7 @@ app.set('view engine', 'handlebars');
 app.get('/', (req, res) => {
   Review.find()
     .then(reviews => {
-      res.render('reviews-index', { reveiws: reviews });
+      res.render('reviews-index', { reviews: reviews });
     })
     .catch(err => {
       console.log(err);
@@ -48,3 +48,8 @@ app.post('/reviews', (req, res) => {
     console.log(err.message);
   });
 });
+
+// SHOW
+app.get('/reviews/:id', (req, res) => {
+  res.send('I\'m a review')
+})
