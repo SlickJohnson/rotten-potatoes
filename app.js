@@ -8,6 +8,8 @@ const exphbs = require('express-handlebars');
 
 const bodyParser = require('body-parser');
 
+const methodOverride = require('method-override');
+
 const Review = mongoose.model('Review', {
   title: String,
   description: String,
@@ -16,6 +18,8 @@ const Review = mongoose.model('Review', {
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(methodOverride('_method'));
 
 app.listen(3000, () => {
   console.log('App listening on port 3000!');
@@ -56,4 +60,22 @@ app.get('/reviews/:id', (req, res) => {
   }).catch((err) => {
     console.log(err.message);
   });
-})
+});
+
+// EDIT
+app.get('/reviews/:id/edit', (req, res) => {
+  Review.findById(req.params.id, (err, review) => {
+    res.render('reviews-edit', { review: review });
+  });
+});
+
+// UPDATE
+app.put('/reviews/:id', (req, res) => {
+  Review.findByIdAndUpdate(req.params.id, req.body)
+    .then(review => {
+      res.redirect(`/reviews/${review._id}`);
+    })
+    .catch(err => {
+      console.log(err.message);
+    });
+});
