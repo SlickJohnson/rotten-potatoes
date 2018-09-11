@@ -1,12 +1,13 @@
-const Review = require('../models/review.js');
+const Review = require('../models/review');
+const Comment = require('../models/comment');
 
 module.exports = (app) => {
   app.get('/', (req, res) => {
     Review.find()
-      .then(reviews => {
-        res.render('reviews-index', { reviews: reviews });
+      .then((reviews) => {
+        res.render('reviews-index', { reviews });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   });
@@ -20,7 +21,7 @@ module.exports = (app) => {
   app.post('/reviews', (req, res) => {
     Review.create(req.body).then((review) => {
       console.log(review);
-      res.redirect('/reviews/${review._id}');
+      res.redirect(`/reviews/${review._id}`);
     }).catch((err) => {
       console.log(err.message);
     });
@@ -28,8 +29,12 @@ module.exports = (app) => {
 
   // SHOW
   app.get('/reviews/:id', (req, res) => {
+    // Find review
     Review.findById(req.params.id).then((review) => {
-      res.render('reviews-show', { review: review });
+      // Fetch the comments of review
+      Comment.find({ reviewId: req.params.id }).then((comments) => {
+        res.render('reviews-show', { review, comments });
+      });
     }).catch((err) => {
       console.log(err.message);
     });
@@ -38,25 +43,24 @@ module.exports = (app) => {
   // EDIT
   app.get('/reviews/:id/edit', (req, res) => {
     Review.findById(req.params.id, (err, review) => {
-      res.render('reviews-edit', { review: review });
+      res.render('reviews-edit', { review });
     });
   });
 
   // UPDATE
   app.put('/reviews/:id', (req, res) => {
     Review.findByIdAndUpdate(req.params.id, req.body)
-      .then(review => {
-        res.redirect('/reviews/${review._id}');
+      .then((review) => {
+        res.redirect(`/reviews/${review._id}`);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err.message);
       });
   });
 
   // DELETE
   app.delete('/reviews/:id', (req, res) => {
-    console.log("DELETE review");
-    Review.findByIdAndRemove(req.params.id).then((review) => {
+    Review.findByIdAndRemove(req.params.id).then(() => {
       res.redirect('/');
     }).catch((err) => {
       console.log(err.message);
