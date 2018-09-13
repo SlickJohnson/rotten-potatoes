@@ -14,6 +14,8 @@ const reviews = require('./controllers/reviews');
 
 const comments = require('./controllers/comments');
 
+const movies = require('./controllers/movies');
+
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/rotten-potatoes', { useNewUrlParser: true });
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -28,6 +30,8 @@ app.set('view engine', 'handlebars');
 reviews(app);
 
 comments(app);
+
+movies(app);
 
 module.exports = app.listen(process.env.PORT || 3000, () => {
   console.log('App listening on port 3000!');
