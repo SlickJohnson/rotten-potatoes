@@ -6,7 +6,7 @@
     <h5>{{review.movieTitle}}</h5>
     <p>{{review.description}}</p>
 
-    <p><a href="/reviews/{{review._id}}/edit">Edit</a></p>
+    <p><a href="/movies/{{review.movieId}}/reviews/{{review._id}}/edit">Edit</a></p>
 
     <!-- Delete button -->
     <p><form method="POST" action="/reviews/{{review._id}}?_method=DELETE">
